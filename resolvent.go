@@ -14,18 +14,6 @@ func (r *Resolver) Query(
 	qname string,
 	qclass uint16,
 	qtype uint16,
-) ([]dns.RR, error) {
-	message := new(dns.Msg)
-	message.Id = dns.Id()
-	message.Question = make([]dns.Question, 1)
-	message.Question[0] = dns.Question{
-		dns.Fqdn(qname),
-		qtype,
-		qclass,
-	}
-	response, err := dns.ExchangeContext(ctx, message, server)
-	if err != nil {
-		return nil, err
-	}
-	return response.Answer, nil
+) (response *dns.Msg, err error) {
+	return r.query(ctx, server, qname, qclass, qtype)
 }
