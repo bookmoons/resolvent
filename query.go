@@ -15,6 +15,10 @@ func (r *Resolver) query(
 	qclass uint16,
 	qtype uint16,
 ) (response *dns.Msg, err error) {
+	server, err := constructServer(address, port)
+	if err != nil {
+		return nil, err
+	}
 	request := new(dns.Msg)
 	request.Id = dns.Id()
 	request.Question = make([]dns.Question, 1)
@@ -22,10 +26,6 @@ func (r *Resolver) query(
 		Name:   dns.Fqdn(qname),
 		Qclass: qclass,
 		Qtype:  qtype,
-	}
-	server, err := constructServer(address, port)
-	if err != nil {
-		return nil, err
 	}
 	return dns.ExchangeContext(ctx, request, server)
 }
