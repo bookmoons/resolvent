@@ -2,13 +2,15 @@ package resolvent
 
 import (
 	"context"
+	"net"
 
 	"github.com/miekg/dns"
 )
 
 func (r *Resolver) query(
 	ctx context.Context,
-	server string,
+	address net.IP,
+	port uint16,
 	qname string,
 	qclass uint16,
 	qtype uint16,
@@ -20,6 +22,10 @@ func (r *Resolver) query(
 		Name:   dns.Fqdn(qname),
 		Qclass: qclass,
 		Qtype:  qtype,
+	}
+	server, err := constructServer(address, port)
+	if err != nil {
+		return nil, err
 	}
 	return dns.ExchangeContext(ctx, request, server)
 }
