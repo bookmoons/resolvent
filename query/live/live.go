@@ -9,6 +9,10 @@ import (
 
 type LiveQuerier struct{}
 
+func New() *LiveQuerier {
+	return &LiveQuerier{}
+}
+
 func (*LiveQuerier) Query(
 	ctx context.Context,
 	address net.IP,

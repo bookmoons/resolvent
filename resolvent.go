@@ -15,7 +15,7 @@ type Resolver struct {
 
 func New() *Resolver {
 	return &Resolver{
-		querier: &live.LiveQuerier{},
+		querier: live.New(),
 	}
 }
 
