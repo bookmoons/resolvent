@@ -7,13 +7,18 @@ import (
 	"github.com/miekg/dns"
 )
 
-type liveQuerier struct{}
-
-func New() *liveQuerier {
-	return &liveQuerier{}
+type liveQuerier struct {
+	client *dns.Client
 }
 
-func (*liveQuerier) Query(
+func New() *liveQuerier {
+	client := new(dns.Client)
+	return &liveQuerier{
+		client: client,
+	}
+}
+
+func (q *liveQuerier) Query(
 	ctx context.Context,
 	address net.IP,
 	port uint16,
@@ -33,5 +38,6 @@ func (*liveQuerier) Query(
 		Qclass: qclass,
 		Qtype:  qtype,
 	}
-	return dns.ExchangeContext(ctx, request, server)
+	response, _, err = q.client.ExchangeContext(ctx, request, server)
+	return response, err
 }
