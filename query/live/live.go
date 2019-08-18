@@ -7,13 +7,13 @@ import (
 	"github.com/miekg/dns"
 )
 
-type LiveQuerier struct{}
+type liveQuerier struct{}
 
-func New() *LiveQuerier {
-	return &LiveQuerier{}
+func New() *liveQuerier {
+	return &liveQuerier{}
 }
 
-func (*LiveQuerier) Query(
+func (*liveQuerier) Query(
 	ctx context.Context,
 	address net.IP,
 	port uint16,
