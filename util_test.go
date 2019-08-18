@@ -26,10 +26,8 @@ func TestConstructServer(t *testing.T) {
 	}
 	t.Run("invalid", func(t *testing.T) {
 		var address net.IP = []byte{1, 2, 3, 4, 5}
-		expected := "invalid IP address"
 		_, err := constructServer(address, 50000)
-		assert.Error(t, err, "incorrect pass")
-		assert.EqualError(t, err, expected, "incorrect error")
+		assert.EqualError(t, err, "invalid IP address", "incorrect error")
 	})
 }
 
