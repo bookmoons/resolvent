@@ -21,13 +21,13 @@ func TestConstructServer(t *testing.T) {
 		t.Run(item.address.String(), func(t *testing.T) {
 			server, err := constructServer(item.address, item.port)
 			assert.NoError(t, err, "incorrect fail")
-			assert.Equal(t, server, item.result, "incorrect result")
+			assert.Equal(t, server, item.result)
 		})
 	}
 	t.Run("invalid", func(t *testing.T) {
 		var address net.IP = []byte{1, 2, 3, 4, 5}
 		_, err := constructServer(address, 50000)
-		assert.EqualError(t, err, "invalid IP address", "incorrect error")
+		assert.EqualError(t, err, "invalid IP address")
 	})
 }
 
