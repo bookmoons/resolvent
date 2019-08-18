@@ -1,4 +1,4 @@
-package resolvent
+package live
 
 import (
 	"context"
@@ -7,7 +7,9 @@ import (
 	"github.com/miekg/dns"
 )
 
-func (r *Resolver) query(
+type LiveQuerier struct{}
+
+func (*LiveQuerier) Query(
 	ctx context.Context,
 	address net.IP,
 	port uint16,

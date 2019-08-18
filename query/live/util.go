@@ -1,4 +1,4 @@
-package resolvent
+package live
 
 import (
 	"fmt"
