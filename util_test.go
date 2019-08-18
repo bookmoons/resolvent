@@ -5,6 +5,42 @@ import (
 	"testing"
 )
 
+func TestConstructServer(t *testing.T) {
+	t.Parallel()
+	pass := []struct {
+		address net.IP
+		port    uint16
+		result  string
+	}{
+		{net.ParseIP("192.0.2.1"), 49152, "192.0.2.1:49152"},
+		{net.ParseIP("2001:db8::1"), 49153, "[2001:db8::1]:49153"},
+	}
+	for _, item := range pass {
+		t.Run(item.address.String(), func(t *testing.T) {
+			server, err := constructServer(item.address, item.port)
+			if err != nil {
+				t.Errorf("incorrect fail: %v", err)
+			}
+			if server != item.result {
+				message := "incorrect result %s, expected %s"
+				t.Errorf(message, server, item.result)
+			}
+		})
+	}
+	t.Run("invalid", func(t *testing.T) {
+		var address net.IP = []byte{1, 2, 3, 4, 5}
+		expected := "invalid IP address"
+		_, err := constructServer(address, 50000)
+		if err == nil {
+			t.Errorf("incorrect pass")
+		}
+		if err.Error() != expected {
+			message := "incorrect error %s, expected %s"
+			t.Errorf(message, err.Error(), expected)
+		}
+	})
+}
+
 func TestIsIPv4(t *testing.T) {
 	t.Parallel()
 	pass := []net.IP{
