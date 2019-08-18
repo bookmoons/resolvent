@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
+
+[[projects]]
   name = "github.com/miekg/dns"
   packages = ["."]
   revision = "c67445656579a3c3836047c509073f97022da0ed"
@@ -12,6 +18,18 @@
   packages = ["."]
   revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
   version = "v0.8.1"
+
+[[projects]]
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/stretchr/testify"
+  packages = ["assert"]
+  revision = "221dbe5ed46703ee255b1da0dec05086f5035f62"
+  version = "v1.4.0"
 
 [[projects]]
   branch = "master"
@@ -43,9 +61,15 @@
   ]
   revision = "fde4db37ae7ad8191b03d30d27f258b5291ae4e3"
 
+[[projects]]
+  name = "gopkg.in/yaml.v2"
+  packages = ["."]
+  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
+  version = "v2.2.2"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "54fa92c3ca2304c33ca1930cad881bc6676469a85442f33e4168fe1ce6a3f723"
+  inputs-digest = "ad1ba28c7f3c7ffea77d159c8dd95df2370329ec1bdcc788f43f38611cfd57a1"
   solver-name = "gps-cdcl"
   solver-version = 1

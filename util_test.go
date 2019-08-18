@@ -3,6 +3,8 @@ package resolvent
 import (
 	"net"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestConstructServer(t *testing.T) {
@@ -18,26 +20,16 @@ func TestConstructServer(t *testing.T) {
 	for _, item := range pass {
 		t.Run(item.address.String(), func(t *testing.T) {
 			server, err := constructServer(item.address, item.port)
-			if err != nil {
-				t.Errorf("incorrect fail: %v", err)
-			}
-			if server != item.result {
-				message := "incorrect result %s, expected %s"
-				t.Errorf(message, server, item.result)
-			}
+			assert.NoError(t, err, "incorrect fail")
+			assert.Equal(t, server, item.result, "incorrect result")
 		})
 	}
 	t.Run("invalid", func(t *testing.T) {
 		var address net.IP = []byte{1, 2, 3, 4, 5}
 		expected := "invalid IP address"
 		_, err := constructServer(address, 50000)
-		if err == nil {
-			t.Errorf("incorrect pass")
-		}
-		if err.Error() != expected {
-			message := "incorrect error %s, expected %s"
-			t.Errorf(message, err.Error(), expected)
-		}
+		assert.Error(t, err, "incorrect pass")
+		assert.EqualError(t, err, expected, "incorrect error")
 	})
 }
 
@@ -56,16 +48,12 @@ func TestIsIPv4(t *testing.T) {
 	}
 	for _, item := range pass {
 		t.Run(item.String(), func(t *testing.T) {
-			if !isIPv4(item) {
-				t.Errorf("incorrect fail")
-			}
+			assert.True(t, isIPv4(item), "incorrect fail")
 		})
 	}
 	for _, item := range fail {
 		t.Run(item.String(), func(t *testing.T) {
-			if isIPv4(item) {
-				t.Errorf("incorrect pass")
-			}
+			assert.False(t, isIPv4(item), "incorrect pass")
 		})
 	}
 }
@@ -85,16 +73,12 @@ func TestIsIPv6(t *testing.T) {
 	}
 	for _, item := range pass {
 		t.Run(item.String(), func(t *testing.T) {
-			if !isIPv6(item) {
-				t.Errorf("incorrect fail")
-			}
+			assert.True(t, isIPv6(item), "incorrect fail")
 		})
 	}
 	for _, item := range fail {
 		t.Run(item.String(), func(t *testing.T) {
-			if isIPv6(item) {
-				t.Errorf("incorrect pass")
-			}
+			assert.False(t, isIPv6(item), "incorrect pass")
 		})
 	}
 }
