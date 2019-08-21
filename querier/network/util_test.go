@@ -1,4 +1,4 @@
-package live
+package network
 
 import (
 	"net"

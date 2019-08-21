@@ -1,4 +1,4 @@
-package live
+package network
 
 import (
 	"context"
@@ -7,18 +7,18 @@ import (
 	"github.com/miekg/dns"
 )
 
-type liveQuerier struct {
+type networkQuerier struct {
 	client *dns.Client
 }
 
-func New() *liveQuerier {
+func New() *networkQuerier {
 	client := new(dns.Client)
-	return &liveQuerier{
+	return &networkQuerier{
 		client: client,
 	}
 }
 
-func (q *liveQuerier) Query(
+func (q *networkQuerier) Query(
 	ctx context.Context,
 	address net.IP,
 	port uint16,

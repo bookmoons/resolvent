@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/loadimpact/resolvent/querier"
-	"github.com/loadimpact/resolvent/querier/live"
+	networkQuerier "github.com/loadimpact/resolvent/querier/network"
 	"github.com/miekg/dns"
 )
 
@@ -21,7 +21,7 @@ type Resolver struct {
 
 func New() *Resolver {
 	return &Resolver{
-		q:            live.New(),
+		q:            networkQuerier.New(),
 		QueryTimeout: defaultQueryTimeout * time.Second,
 	}
 }
