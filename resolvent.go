@@ -5,8 +5,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/loadimpact/resolvent/query"
-	"github.com/loadimpact/resolvent/query/live"
+	"github.com/loadimpact/resolvent/querier"
+	"github.com/loadimpact/resolvent/querier/live"
 	"github.com/miekg/dns"
 )
 
@@ -15,13 +15,13 @@ const (
 )
 
 type Resolver struct {
-	querier      query.Querier
+	q            querier.Querier
 	QueryTimeout time.Duration
 }
 
 func New() *Resolver {
 	return &Resolver{
-		querier:      live.New(),
+		q:            live.New(),
 		QueryTimeout: defaultQueryTimeout * time.Second,
 	}
 }
@@ -39,5 +39,5 @@ func (r *Resolver) Query(
 		defer cancel()
 		ctx = timed
 	}
-	return r.querier.Query(ctx, address, port, qname, qclass, qtype)
+	return r.q.Query(ctx, address, port, qname, qclass, qtype)
 }
