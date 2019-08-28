@@ -1,3 +1,4 @@
+// Package querier defines the interface implemented by DNS queriers.
 package querier
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/miekg/dns"
 )
 
+// Querier is the interface implemented by DNS queriers.
 type Querier interface {
 	Query(
 		ctx context.Context,
