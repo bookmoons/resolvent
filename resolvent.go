@@ -1,3 +1,4 @@
+// Package resolvent implements DNS resolution.
 package resolvent
 
 import (
@@ -14,11 +15,13 @@ const (
 	defaultQueryTimeout = 5 // seconds
 )
 
+// Resolver implements a DNS resolver.
 type Resolver struct {
 	q            querier.Querier
 	QueryTimeout time.Duration
 }
 
+// New returns a DNS resolver.
 func New() *Resolver {
 	return &Resolver{
 		q:            networkQuerier.New(),
@@ -26,6 +29,7 @@ func New() *Resolver {
 	}
 }
 
+// Query performs an atomic query with a single nameserver.
 func (r *Resolver) Query(
 	ctx context.Context,
 	address net.IP,
