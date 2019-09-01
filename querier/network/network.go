@@ -4,6 +4,7 @@ package network
 import (
 	"context"
 	"net"
+	"time"
 
 	"github.com/miekg/dns"
 )
@@ -28,10 +29,10 @@ func (q *networkQuerier) Query(
 	qname string,
 	qclass uint16,
 	qtype uint16,
-) (response *dns.Msg, err error) {
+) (response *dns.Msg, duration time.Duration, err error) {
 	server, err := constructServer(address, port)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	request := new(dns.Msg)
 	request.Id = dns.Id()
@@ -41,6 +42,5 @@ func (q *networkQuerier) Query(
 		Qclass: qclass,
 		Qtype:  qtype,
 	}
-	response, _, err = q.client.ExchangeContext(ctx, request, server)
-	return response, err
+	return q.client.ExchangeContext(ctx, request, server)
 }

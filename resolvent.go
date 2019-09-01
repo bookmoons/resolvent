@@ -37,7 +37,7 @@ func (r *Resolver) Query(
 	qname string,
 	qclass uint16,
 	qtype uint16,
-) (response *dns.Msg, err error) {
+) (response *dns.Msg, duration time.Duration, err error) {
 	if _, ok := ctx.Deadline(); !ok {
 		timed, cancel := context.WithTimeout(ctx, r.QueryTimeout)
 		defer cancel()

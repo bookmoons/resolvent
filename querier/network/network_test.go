@@ -15,7 +15,7 @@ func TestQuery(t *testing.T) {
 	t.Parallel()
 	querier := New()
 	t.Run("invalid address", func(t *testing.T) {
-		_, err := querier.Query(
+		_, _, err := querier.Query(
 			context.Background(),
 			[]byte{1, 2, 3, 4, 5},
 			53,
@@ -30,7 +30,7 @@ func TestQuery(t *testing.T) {
 			context.Background(),
 			100*time.Millisecond,
 		)
-		_, err := querier.Query(
+		_, _, err := querier.Query(
 			ctx,
 			net.ParseIP("192.0.2.1"),
 			53,
@@ -51,7 +51,7 @@ func TestQuery(t *testing.T) {
 			t.Fatalf("failed to start server: %v", err)
 		}
 		defer server.Shutdown()
-		response, err := querier.Query(
+		response, _, err := querier.Query(
 			context.Background(),
 			net.ParseIP("127.0.0.1"),
 			port,

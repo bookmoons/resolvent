@@ -4,6 +4,7 @@ package querier
 import (
 	"context"
 	"net"
+	"time"
 
 	"github.com/miekg/dns"
 )
@@ -17,5 +18,5 @@ type Querier interface {
 		qname string,
 		qclass uint16,
 		qtype uint16,
-	) (response *dns.Msg, err error)
+	) (response *dns.Msg, duration time.Duration, err error)
 }
