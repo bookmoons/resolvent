@@ -32,6 +32,7 @@ func New() *Resolver {
 // Query performs an atomic query with a single nameserver.
 func (r *Resolver) Query(
 	ctx context.Context,
+	protocol querier.Protocol,
 	address net.IP,
 	port uint16,
 	qname string,
@@ -43,5 +44,5 @@ func (r *Resolver) Query(
 		defer cancel()
 		ctx = timed
 	}
-	return r.q.Query(ctx, address, port, qname, qclass, qtype)
+	return r.q.Query(ctx, protocol, address, port, qname, qclass, qtype)
 }

@@ -9,10 +9,19 @@ import (
 	"github.com/miekg/dns"
 )
 
+// Protocol is a network transport protocol.
+type Protocol int
+
+const (
+	UDP Protocol = iota
+	TCP
+)
+
 // Querier is the interface implemented by DNS queriers.
 type Querier interface {
 	Query(
 		ctx context.Context,
+		protocol Protocol,
 		address net.IP,
 		port uint16,
 		qname string,

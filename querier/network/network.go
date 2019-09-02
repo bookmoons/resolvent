@@ -6,24 +6,31 @@ import (
 	"net"
 	"time"
 
+	"github.com/loadimpact/resolvent/querier"
 	"github.com/miekg/dns"
 )
 
 type networkQuerier struct {
-	client *dns.Client
+	udpClient *dns.Client
+	tcpClient *dns.Client
 }
 
 // New returns a querier that performs network exchange.
 func New() *networkQuerier {
-	client := new(dns.Client)
 	return &networkQuerier{
-		client: client,
+		udpClient: &dns.Client{
+			Net: "udp",
+		},
+		tcpClient: &dns.Client{
+			Net: "tcp",
+		},
 	}
 }
 
 // Query executes an exchange with a single DNS nameserver.
 func (q *networkQuerier) Query(
 	ctx context.Context,
+	protocol querier.Protocol,
 	address net.IP,
 	port uint16,
 	qname string,
@@ -42,5 +49,8 @@ func (q *networkQuerier) Query(
 		Qclass: qclass,
 		Qtype:  qtype,
 	}
-	return q.client.ExchangeContext(ctx, request, server)
+	if protocol == querier.TCP {
+		return q.tcpClient.ExchangeContext(ctx, request, server)
+	}
+	return q.udpClient.ExchangeContext(ctx, request, server)
 }
