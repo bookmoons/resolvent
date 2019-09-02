@@ -8,6 +8,18 @@
   version = "v1.1.1"
 
 [[projects]]
+  name = "github.com/google/go-cmp"
+  packages = [
+    "cmp",
+    "cmp/internal/diff",
+    "cmp/internal/flags",
+    "cmp/internal/function",
+    "cmp/internal/value"
+  ]
+  revision = "2d0692c2e9617365a95b295612ac0d4415ba4627"
+  version = "v0.3.1"
+
+[[projects]]
   name = "github.com/miekg/dns"
   packages = ["."]
   revision = "c67445656579a3c3836047c509073f97022da0ed"
@@ -27,7 +39,10 @@
 
 [[projects]]
   name = "github.com/stretchr/testify"
-  packages = ["assert"]
+  packages = [
+    "assert",
+    "require"
+  ]
   revision = "221dbe5ed46703ee255b1da0dec05086f5035f62"
   version = "v1.4.0"
 
@@ -70,6 +85,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ad1ba28c7f3c7ffea77d159c8dd95df2370329ec1bdcc788f43f38611cfd57a1"
+  inputs-digest = "7a6e6e5e2610717216e484ea344c87d59d2eb1e0379b7ca4b9464bec2a2c6a6b"
   solver-name = "gps-cdcl"
   solver-version = 1
