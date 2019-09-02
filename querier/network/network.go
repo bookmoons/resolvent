@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/loadimpact/resolvent/querier"
+	"github.com/loadimpact/resolvent"
 	"github.com/miekg/dns"
 )
 
@@ -30,7 +30,7 @@ func New() *networkQuerier {
 // Query executes an exchange with a single DNS nameserver.
 func (q *networkQuerier) Query(
 	ctx context.Context,
-	protocol querier.Protocol,
+	protocol resolvent.Protocol,
 	address net.IP,
 	port uint16,
 	qname string,
@@ -49,7 +49,7 @@ func (q *networkQuerier) Query(
 		Qclass: qclass,
 		Qtype:  qtype,
 	}
-	if protocol == querier.TCP {
+	if protocol == resolvent.TCP {
 		return q.tcpClient.ExchangeContext(ctx, request, hostport)
 	}
 	return q.udpClient.ExchangeContext(ctx, request, hostport)

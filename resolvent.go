@@ -1,5 +1,5 @@
-// Package querier defines the interface implemented by DNS queriers.
-package querier
+// Package resolvent defines domain types.
+package resolvent
 
 import (
 	"context"

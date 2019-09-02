@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/loadimpact/resolvent/querier"
+	"github.com/loadimpact/resolvent"
 	"github.com/miekg/dns"
 	"github.com/stretchr/testify/assert"
 )
@@ -15,10 +15,10 @@ import (
 func TestQuery(t *testing.T) {
 	t.Parallel()
 	t.Run("invalid address", func(t *testing.T) {
-		client := New()
-		_, _, err := client.Query(
+		querier := New()
+		_, _, err := querier.Query(
 			context.Background(),
-			querier.UDP,
+			resolvent.UDP,
 			[]byte{1, 2, 3, 4, 5},
 			53,
 			"epoch.test",
@@ -28,14 +28,14 @@ func TestQuery(t *testing.T) {
 		assert.EqualError(t, err, "invalid IP address")
 	})
 	t.Run("timeout", func(t *testing.T) {
-		client := New()
+		querier := New()
 		ctx, _ := context.WithTimeout(
 			context.Background(),
 			100*time.Millisecond,
 		)
-		_, _, err := client.Query(
+		_, _, err := querier.Query(
 			ctx,
-			querier.UDP,
+			resolvent.UDP,
 			net.ParseIP("192.0.2.1"),
 			53,
 			"era.test",
@@ -45,7 +45,7 @@ func TestQuery(t *testing.T) {
 		assert.Error(t, err, "incorrect success")
 	})
 	t.Run("success udp", func(t *testing.T) {
-		client := New()
+		querier := New()
 		answer, err := dns.NewRR("age.test A 192.0.2.2")
 		if err != nil {
 			t.Fatalf("failed to construct response: %v", err)
@@ -53,16 +53,16 @@ func TestQuery(t *testing.T) {
 		message := &dns.Msg{Answer: []dns.RR{answer}}
 		server, port, err := startTestServer(
 			t,
-			querier.UDP,
+			resolvent.UDP,
 			[]*dns.Msg{message},
 		)
 		if err != nil {
 			t.Fatalf("failed to start server: %v", err)
 		}
 		defer server.Shutdown()
-		response, _, err := client.Query(
+		response, _, err := querier.Query(
 			context.Background(),
-			querier.UDP,
+			resolvent.UDP,
 			net.ParseIP("127.0.0.1"),
 			port,
 			"age.test",
@@ -82,7 +82,7 @@ func TestQuery(t *testing.T) {
 		)
 	})
 	t.Run("success tcp", func(t *testing.T) {
-		client := New()
+		querier := New()
 		answer, err := dns.NewRR("age.test A 192.0.2.3")
 		if err != nil {
 			t.Fatalf("failed to construct response: %v", err)
@@ -90,16 +90,16 @@ func TestQuery(t *testing.T) {
 		message := &dns.Msg{Answer: []dns.RR{answer}}
 		server, port, err := startTestServer(
 			t,
-			querier.TCP,
+			resolvent.TCP,
 			[]*dns.Msg{message},
 		)
 		if err != nil {
 			t.Fatalf("failed to start server: %v", err)
 		}
 		defer server.Shutdown()
-		response, _, err := client.Query(
+		response, _, err := querier.Query(
 			context.Background(),
-			querier.TCP,
+			resolvent.TCP,
 			net.ParseIP("127.0.0.1"),
 			port,
 			"age.test",
@@ -122,7 +122,7 @@ func TestQuery(t *testing.T) {
 
 func startTestServer(
 	t *testing.T,
-	protocol querier.Protocol,
+	protocol resolvent.Protocol,
 	responses []*dns.Msg,
 ) (server *dns.Server, port uint16, err error) {
 	// Stage responses
@@ -167,11 +167,11 @@ func startTestServer(
 	return
 }
 
-func translateProtocol(protocol querier.Protocol) (network string) {
+func translateProtocol(protocol resolvent.Protocol) (network string) {
 	switch protocol {
-	case querier.UDP:
+	case resolvent.UDP:
 		return "udp"
-	case querier.TCP:
+	case resolvent.TCP:
 		return "tcp"
 	default:
 		panic("invalid protocol")
@@ -180,12 +180,12 @@ func translateProtocol(protocol querier.Protocol) (network string) {
 
 func extractAddress(
 	server *dns.Server,
-	protocol querier.Protocol,
+	protocol resolvent.Protocol,
 ) (address net.Addr) {
 	switch protocol {
-	case querier.UDP:
+	case resolvent.UDP:
 		return server.PacketConn.LocalAddr()
-	case querier.TCP:
+	case resolvent.TCP:
 		return server.Listener.Addr()
 	default:
 		panic("invalid protocol")
