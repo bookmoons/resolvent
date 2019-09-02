@@ -7,10 +7,10 @@ import (
 	"github.com/pkg/errors"
 )
 
-func constructServer(
+func constructHostport(
 	address net.IP,
 	port uint16,
-) (server string, err error) {
+) (hostport string, err error) {
 	if isIPv6(address) {
 		return fmt.Sprintf("[%s]:%d", address.String(), port), nil
 	}

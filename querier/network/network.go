@@ -37,7 +37,7 @@ func (q *networkQuerier) Query(
 	qclass uint16,
 	qtype uint16,
 ) (response *dns.Msg, duration time.Duration, err error) {
-	server, err := constructServer(address, port)
+	hostport, err := constructHostport(address, port)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -50,7 +50,7 @@ func (q *networkQuerier) Query(
 		Qtype:  qtype,
 	}
 	if protocol == querier.TCP {
-		return q.tcpClient.ExchangeContext(ctx, request, server)
+		return q.tcpClient.ExchangeContext(ctx, request, hostport)
 	}
-	return q.udpClient.ExchangeContext(ctx, request, server)
+	return q.udpClient.ExchangeContext(ctx, request, hostport)
 }

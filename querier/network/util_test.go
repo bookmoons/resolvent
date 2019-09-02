@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConstructServer(t *testing.T) {
+func TestConstructHostport(t *testing.T) {
 	t.Parallel()
 	pass := []struct {
 		address net.IP
@@ -19,14 +19,14 @@ func TestConstructServer(t *testing.T) {
 	}
 	for _, item := range pass {
 		t.Run(item.address.String(), func(t *testing.T) {
-			server, err := constructServer(item.address, item.port)
+			hostport, err := constructHostport(item.address, item.port)
 			assert.NoError(t, err, "incorrect fail")
-			assert.Equal(t, server, item.result)
+			assert.Equal(t, hostport, item.result)
 		})
 	}
 	t.Run("invalid", func(t *testing.T) {
 		var address net.IP = []byte{1, 2, 3, 4, 5}
-		_, err := constructServer(address, 50000)
+		_, err := constructHostport(address, 50000)
 		assert.EqualError(t, err, "invalid IP address")
 	})
 }
