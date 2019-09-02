@@ -9,7 +9,7 @@ import (
 
 	"github.com/loadimpact/resolvent"
 	"github.com/miekg/dns"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestQuery(t *testing.T) {
@@ -25,7 +25,7 @@ func TestQuery(t *testing.T) {
 			dns.ClassINET,
 			dns.TypeA,
 		)
-		assert.EqualError(t, err, "invalid IP address")
+		require.EqualError(t, err, "invalid IP address")
 	})
 	t.Run("timeout", func(t *testing.T) {
 		querier := New()
@@ -42,7 +42,7 @@ func TestQuery(t *testing.T) {
 			dns.ClassINET,
 			dns.TypeA,
 		)
-		assert.Error(t, err, "incorrect success")
+		require.Error(t, err, "incorrect success")
 	})
 	t.Run("success udp", func(t *testing.T) {
 		querier := New()
@@ -69,12 +69,12 @@ func TestQuery(t *testing.T) {
 			dns.ClassINET,
 			dns.TypeA,
 		)
-		assert.NoError(t, err, "query failed")
-		assert.Equal(t, 0, len(response.Ns), "nonempty authority section")
-		assert.Equal(t, 0, len(response.Extra), "nonempty additional section")
-		assert.Greater(t, len(response.Answer), 0, "empty answer section")
-		assert.Less(t, len(response.Answer), 2, "excess answers")
-		assert.Equal(
+		require.NoError(t, err, "query failed")
+		require.Equal(t, 0, len(response.Ns), "nonempty authority section")
+		require.Equal(t, 0, len(response.Extra), "nonempty additional section")
+		require.Greater(t, len(response.Answer), 0, "empty answer section")
+		require.Less(t, len(response.Answer), 2, "excess answers")
+		require.Equal(
 			t,
 			"age.test.\t3600\tIN\tA\t192.0.2.2",
 			response.Answer[0].String(),
@@ -106,12 +106,12 @@ func TestQuery(t *testing.T) {
 			dns.ClassINET,
 			dns.TypeA,
 		)
-		assert.NoError(t, err, "query failed")
-		assert.Equal(t, 0, len(response.Ns), "nonempty authority section")
-		assert.Equal(t, 0, len(response.Extra), "nonempty additional section")
-		assert.Greater(t, len(response.Answer), 0, "empty answer section")
-		assert.Less(t, len(response.Answer), 2, "excess answers")
-		assert.Equal(
+		require.NoError(t, err, "query failed")
+		require.Equal(t, 0, len(response.Ns), "nonempty authority section")
+		require.Equal(t, 0, len(response.Extra), "nonempty additional section")
+		require.Greater(t, len(response.Answer), 0, "empty answer section")
+		require.Less(t, len(response.Answer), 2, "excess answers")
+		require.Equal(
 			t,
 			"age.test.\t3600\tIN\tA\t192.0.2.3",
 			response.Answer[0].String(),
@@ -134,7 +134,7 @@ func startTestServer(
 		response := <-responsesChan
 		response.Id = request.Id
 		err := writer.WriteMsg(response)
-		assert.NoError(t, err, "handle error")
+		require.NoError(t, err, "handle error")
 	}
 
 	// Start server
@@ -149,7 +149,7 @@ func startTestServer(
 	}
 	go func() {
 		err := server.ListenAndServe()
-		assert.NoError(t, err, "server error")
+		require.NoError(t, err, "server error")
 	}()
 	<-started
 
