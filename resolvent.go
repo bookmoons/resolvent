@@ -22,6 +22,7 @@ type Querier interface {
 	Query(
 		ctx context.Context,
 		protocol Protocol,
+		local net.IP,
 		address net.IP,
 		port uint16,
 		qname string,

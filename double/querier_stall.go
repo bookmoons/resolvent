@@ -28,6 +28,7 @@ func NewStallQuerier() *stallQuerier {
 func (q *stallQuerier) Query(
 	ctx context.Context,
 	protocol resolvent.Protocol,
+	local net.IP,
 	address net.IP,
 	port uint16,
 	qname string,

@@ -21,6 +21,7 @@ func CancelableQuery(
 	response, _, err = querier.Query(
 		ctx,
 		resolvent.UDP,
+		net.IPv4zero,
 		net.ParseIP("192.0.2.1"),
 		53,
 		"age.test",
@@ -71,6 +72,7 @@ func SimpleQuery(
 	response, _, err := querier.Query(
 		context.Background(),
 		resolvent.UDP,
+		net.IPv4zero,
 		net.ParseIP("192.0.2.1"),
 		53,
 		"epoch.test",
@@ -90,6 +92,7 @@ func TimedQuery(
 	response, _, err = querier.Query(
 		ctx,
 		resolvent.UDP,
+		net.IPv4zero,
 		net.ParseIP("192.0.2.1"),
 		53,
 		"era.test",

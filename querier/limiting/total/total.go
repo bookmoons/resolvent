@@ -34,6 +34,7 @@ func New(
 func (q *totalLimitingQuerier) Query(
 	ctx context.Context,
 	protocol resolvent.Protocol,
+	local net.IP,
 	address net.IP,
 	port uint16,
 	qname string,
@@ -48,6 +49,7 @@ func (q *totalLimitingQuerier) Query(
 	return q.underlying.Query(
 		ctx,
 		protocol,
+		local,
 		address,
 		port,
 		qname,

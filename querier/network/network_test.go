@@ -15,10 +15,11 @@ import (
 func TestQuery(t *testing.T) {
 	t.Parallel()
 	t.Run("invalid address", func(t *testing.T) {
-		querier := New()
+		querier := construct(t)
 		_, _, err := querier.Query(
 			context.Background(),
 			resolvent.UDP,
+			net.IPv4zero,
 			[]byte{1, 2, 3, 4, 5},
 			53,
 			"epoch.test",
@@ -28,7 +29,7 @@ func TestQuery(t *testing.T) {
 		require.EqualError(t, err, "invalid IP address")
 	})
 	t.Run("timeout", func(t *testing.T) {
-		querier := New()
+		querier := construct(t)
 		ctx, _ := context.WithTimeout(
 			context.Background(),
 			100*time.Millisecond,
@@ -36,6 +37,7 @@ func TestQuery(t *testing.T) {
 		_, _, err := querier.Query(
 			ctx,
 			resolvent.UDP,
+			net.IPv4zero,
 			net.ParseIP("192.0.2.1"),
 			53,
 			"era.test",
@@ -45,7 +47,7 @@ func TestQuery(t *testing.T) {
 		require.Error(t, err, "incorrect success")
 	})
 	t.Run("success udp", func(t *testing.T) {
-		querier := New()
+		querier := construct(t)
 		answer, err := dns.NewRR("age.test A 192.0.2.2")
 		if err != nil {
 			t.Fatalf("failed to construct response: %v", err)
@@ -63,6 +65,7 @@ func TestQuery(t *testing.T) {
 		response, _, err := querier.Query(
 			context.Background(),
 			resolvent.UDP,
+			net.IPv4zero,
 			net.ParseIP("127.0.0.1"),
 			port,
 			"age.test",
@@ -82,7 +85,7 @@ func TestQuery(t *testing.T) {
 		)
 	})
 	t.Run("success tcp", func(t *testing.T) {
-		querier := New()
+		querier := construct(t)
 		answer, err := dns.NewRR("age.test A 192.0.2.3")
 		if err != nil {
 			t.Fatalf("failed to construct response: %v", err)
@@ -100,6 +103,7 @@ func TestQuery(t *testing.T) {
 		response, _, err := querier.Query(
 			context.Background(),
 			resolvent.TCP,
+			net.IPv4zero,
 			net.ParseIP("127.0.0.1"),
 			port,
 			"age.test",
@@ -118,6 +122,12 @@ func TestQuery(t *testing.T) {
 			"incorrect resource record",
 		)
 	})
+}
+
+func construct(t *testing.T) (querier *networkQuerier) {
+	querier, err := New()
+	require.NoError(t, err, "construct querier failed")
+	return querier
 }
 
 func startTestServer(
