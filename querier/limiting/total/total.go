@@ -42,8 +42,7 @@ func (q *totalLimitingQuerier) Query(
 	qclass uint16,
 	qtype uint16,
 ) (response *dns.Msg, duration time.Duration, err error) {
-	err = q.semaphore.Procure(ctx)
-	if err != nil {
+	if err = q.semaphore.Procure(ctx); err != nil {
 		return
 	}
 	defer q.semaphore.Vacate()
