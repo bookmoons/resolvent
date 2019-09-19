@@ -7,13 +7,14 @@ import (
 	"time"
 
 	"github.com/loadimpact/resolvent"
+	"github.com/loadimpact/resolvent/semaphore"
 	"github.com/miekg/dns"
 	"github.com/pkg/errors"
 )
 
 type totalLimitingQuerier struct {
 	underlying resolvent.Querier
-	semaphore  chan struct{}
+	semaphore  semaphore.Semaphore
 }
 
 // New returns a querier that limits total in flight queries.
@@ -26,7 +27,7 @@ func New(
 	}
 	return &totalLimitingQuerier{
 		underlying: underlying,
-		semaphore:  make(chan struct{}, max),
+		semaphore:  semaphore.New(max),
 	}, nil
 }
 
@@ -41,11 +42,11 @@ func (q *totalLimitingQuerier) Query(
 	qclass uint16,
 	qtype uint16,
 ) (response *dns.Msg, duration time.Duration, err error) {
-	err = q.procure(ctx)
+	err = q.semaphore.Procure(ctx)
 	if err != nil {
 		return
 	}
-	defer q.vacate()
+	defer q.semaphore.Vacate()
 	return q.underlying.Query(
 		ctx,
 		protocol,
@@ -56,17 +57,4 @@ func (q *totalLimitingQuerier) Query(
 		qclass,
 		qtype,
 	)
-}
-
-func (q *totalLimitingQuerier) procure(ctx context.Context) error {
-	select {
-	case <-ctx.Done():
-		return ctx.Err()
-	case q.semaphore <- struct{}{}:
-		return nil
-	}
-}
-
-func (q *totalLimitingQuerier) vacate() {
-	<-q.semaphore
 }
