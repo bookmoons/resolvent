@@ -13,6 +13,26 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// Two returns an array with 2 elements.
+func Two() [2]struct{} {
+	return [2]struct{}{}
+}
+
+// Three returns an array with 3 elements.
+func Three() [3]struct{} {
+	return [3]struct{}{}
+}
+
+// Four returns an array with 4 elements.
+func Four() [4]struct{} {
+	return [4]struct{}{}
+}
+
+// ABC returns an array of a, b, and c.
+func ABC() [3]string {
+	return [3]string{"a", "b", "c"}
+}
+
 // CancelableQuery initiates a simple cancelable query.
 func CancelableQuery(
 	ctx context.Context,
