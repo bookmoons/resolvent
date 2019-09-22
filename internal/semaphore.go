@@ -42,7 +42,7 @@ func (s *semaphore) Procure(ctx context.Context) error {
 	}
 }
 
-// Vacate signals completion of 1 procuring operation.
+// Vacate releases 1 unit of capacity.
 func (s *semaphore) Vacate() {
 	<-s.active
 }
