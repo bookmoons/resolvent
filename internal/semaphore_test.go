@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestProcure(t *testing.T) {
+func TestSemaphore_Procure(t *testing.T) {
 	t.Parallel()
 	t.Run("1", func(t *testing.T) {
 		semaphore := NewSemaphore(1)
@@ -23,7 +23,7 @@ func TestProcure(t *testing.T) {
 	})
 }
 
-func TestVacate(t *testing.T) {
+func TestSemaphore_Vacate(t *testing.T) {
 	t.Parallel()
 	t.Run("invalid", func(t *testing.T) {
 		semaphore := NewSemaphore(1)
@@ -46,7 +46,7 @@ func TestVacate(t *testing.T) {
 	})
 }
 
-func TestReuse(t *testing.T) {
+func TestSemaphore_Reuse(t *testing.T) {
 	t.Parallel()
 	t.Run("1", func(t *testing.T) {
 		semaphore := NewSemaphore(1)
@@ -66,7 +66,7 @@ func TestReuse(t *testing.T) {
 	})
 }
 
-func TestAwait(t *testing.T) {
+func TestSemaphore_Await(t *testing.T) {
 	t.Parallel()
 	t.Run("1", func(t *testing.T) {
 		semaphore := NewSemaphore(1)
@@ -102,7 +102,7 @@ func TestAwait(t *testing.T) {
 	})
 }
 
-func TestAbandon(t *testing.T) {
+func TestSemaphore_Abandon(t *testing.T) {
 	t.Parallel()
 	semaphore := NewSemaphore(1)
 	err := semaphore.Procure(context.Background())
