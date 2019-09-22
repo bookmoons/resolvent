@@ -44,5 +44,9 @@ func (s *semaphore) Procure(ctx context.Context) error {
 
 // Vacate releases 1 unit of capacity.
 func (s *semaphore) Vacate() {
-	<-s.active
+	select {
+	case <-s.active:
+	default:
+		panic("vacated unprocured semaphore")
+	}
 }

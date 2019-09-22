@@ -25,6 +25,12 @@ func TestProcure(t *testing.T) {
 
 func TestVacate(t *testing.T) {
 	t.Parallel()
+	t.Run("invalid", func(t *testing.T) {
+		semaphore := NewSemaphore(1)
+		require.Panics(t, func() {
+			semaphore.Vacate()
+		})
+	})
 	t.Run("1", func(t *testing.T) {
 		semaphore := NewSemaphore(1)
 		err := semaphore.Procure(context.Background())
