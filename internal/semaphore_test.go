@@ -43,6 +43,9 @@ func TestSemaphore_Vacate(t *testing.T) {
 			err := semaphore.Procure(context.Background())
 			require.NoErrorf(t, err, "procure %d failed", i)
 		}
+		for range [3]struct{}{} {
+			semaphore.Vacate()
+		}
 	})
 }
 
