@@ -1,4 +1,4 @@
-package semaphore
+package internal
 
 import (
 	"context"
@@ -10,12 +10,12 @@ import (
 func TestProcure(t *testing.T) {
 	t.Parallel()
 	t.Run("1", func(t *testing.T) {
-		semaphore := New(1)
+		semaphore := NewSemaphore(1)
 		err := semaphore.Procure(context.Background())
 		require.NoError(t, err, "procure failed")
 	})
 	t.Run("3", func(t *testing.T) {
-		semaphore := New(3)
+		semaphore := NewSemaphore(3)
 		for i := range [3]struct{}{} {
 			err := semaphore.Procure(context.Background())
 			require.NoErrorf(t, err, "procure %d failed", i)
@@ -26,13 +26,13 @@ func TestProcure(t *testing.T) {
 func TestVacate(t *testing.T) {
 	t.Parallel()
 	t.Run("1", func(t *testing.T) {
-		semaphore := New(1)
+		semaphore := NewSemaphore(1)
 		err := semaphore.Procure(context.Background())
 		require.NoError(t, err, "procure failed")
 		semaphore.Vacate()
 	})
 	t.Run("3", func(t *testing.T) {
-		semaphore := New(3)
+		semaphore := NewSemaphore(3)
 		for i := range [3]struct{}{} {
 			err := semaphore.Procure(context.Background())
 			require.NoErrorf(t, err, "procure %d failed", i)
@@ -43,7 +43,7 @@ func TestVacate(t *testing.T) {
 func TestReuse(t *testing.T) {
 	t.Parallel()
 	t.Run("1", func(t *testing.T) {
-		semaphore := New(1)
+		semaphore := NewSemaphore(1)
 		for i := range [2]struct{}{} {
 			err := semaphore.Procure(context.Background())
 			require.NoErrorf(t, err, "procure %d failed", i)
@@ -51,7 +51,7 @@ func TestReuse(t *testing.T) {
 		}
 	})
 	t.Run("3", func(t *testing.T) {
-		semaphore := New(1)
+		semaphore := NewSemaphore(1)
 		for i := range [4]struct{}{} {
 			err := semaphore.Procure(context.Background())
 			require.NoErrorf(t, err, "procure %d failed", i)
@@ -63,7 +63,7 @@ func TestReuse(t *testing.T) {
 func TestAwait(t *testing.T) {
 	t.Parallel()
 	t.Run("1", func(t *testing.T) {
-		semaphore := New(1)
+		semaphore := NewSemaphore(1)
 		err := semaphore.Procure(context.Background())
 		require.NoError(t, err, "preliminary procure failed")
 		procured := make(chan struct{})
@@ -77,7 +77,7 @@ func TestAwait(t *testing.T) {
 		<-procured
 	})
 	t.Run("3", func(t *testing.T) {
-		semaphore := New(1)
+		semaphore := NewSemaphore(1)
 		err := semaphore.Procure(context.Background())
 		require.NoError(t, err, "preliminary procure failed")
 		procured := make(chan struct{})
@@ -98,7 +98,7 @@ func TestAwait(t *testing.T) {
 
 func TestAbandon(t *testing.T) {
 	t.Parallel()
-	semaphore := New(1)
+	semaphore := NewSemaphore(1)
 	err := semaphore.Procure(context.Background())
 	require.NoError(t, err, "preliminary procure failed")
 	ctx, cancel := context.WithCancel(context.Background())

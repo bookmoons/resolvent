@@ -7,14 +7,14 @@ import (
 	"time"
 
 	"github.com/loadimpact/resolvent"
-	"github.com/loadimpact/resolvent/semaphore"
+	"github.com/loadimpact/resolvent/internal"
 	"github.com/miekg/dns"
 	"github.com/pkg/errors"
 )
 
 type totalLimitingQuerier struct {
 	underlying resolvent.Querier
-	semaphore  semaphore.Semaphore
+	semaphore  internal.Semaphore
 }
 
 // New returns a querier that limits total in flight queries.
@@ -27,7 +27,7 @@ func New(
 	}
 	return &totalLimitingQuerier{
 		underlying: underlying,
-		semaphore:  semaphore.New(max),
+		semaphore:  internal.NewSemaphore(max),
 	}, nil
 }
 

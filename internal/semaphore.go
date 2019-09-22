@@ -1,5 +1,4 @@
-// Package semaphore implements a channel based semaphore.
-package semaphore
+package internal
 
 import (
 	"context"
@@ -16,8 +15,8 @@ type semaphore struct {
 	procuring chan struct{}
 }
 
-// New returns a channel based semaphore.
-func New(capacity uint16) *semaphore {
+// NewSemaphore returns a channel based semaphore.
+func NewSemaphore(capacity uint16) *semaphore {
 	return &semaphore{
 		active:    make(chan struct{}, capacity),
 		procuring: make(chan struct{}),
