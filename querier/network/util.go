@@ -1,27 +1,11 @@
 package network
 
 import (
-	"fmt"
 	"net"
 
 	"github.com/loadimpact/resolvent"
-	"github.com/loadimpact/resolvent/internal"
 	"github.com/miekg/dns"
-	"github.com/pkg/errors"
 )
-
-func constructHostport(
-	address net.IP,
-	port uint16,
-) (hostport string, err error) {
-	if internal.IsIPv6(address) {
-		return fmt.Sprintf("[%s]:%d", address.String(), port), nil
-	}
-	if internal.IsIPv4(address) {
-		return fmt.Sprintf("%s:%d", address.String(), port), nil
-	}
-	return "", errors.New("invalid IP address")
-}
 
 func constructClients() (
 	clients map[string]map[resolvent.Protocol]*dns.Client,

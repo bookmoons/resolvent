@@ -1,4 +1,4 @@
-package network
+package internal
 
 import (
 	"net"
@@ -19,14 +19,14 @@ func TestConstructHostport(t *testing.T) {
 	}
 	for _, item := range pass {
 		t.Run(item.address.String(), func(t *testing.T) {
-			hostport, err := constructHostport(item.address, item.port)
+			hostport, err := ConstructHostport(item.address, item.port)
 			assert.NoError(t, err, "incorrect fail")
 			assert.Equal(t, hostport, item.result)
 		})
 	}
 	t.Run("invalid", func(t *testing.T) {
 		var address net.IP = []byte{1, 2, 3, 4, 5}
-		_, err := constructHostport(address, 50000)
+		_, err := ConstructHostport(address, 50000)
 		assert.EqualError(t, err, "invalid IP address")
 	})
 }

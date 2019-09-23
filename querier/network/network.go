@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/loadimpact/resolvent"
+	"github.com/loadimpact/resolvent/internal"
 	"github.com/miekg/dns"
 	"github.com/pkg/errors"
 )
@@ -42,7 +43,7 @@ func (q *networkQuerier) Query(
 	if err != nil {
 		return
 	}
-	hostport, err := constructHostport(address, port)
+	hostport, err := internal.ConstructHostport(address, port)
 	if err != nil {
 		return
 	}
