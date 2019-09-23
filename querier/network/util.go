@@ -5,6 +5,7 @@ import (
 	"net"
 
 	"github.com/loadimpact/resolvent"
+	"github.com/loadimpact/resolvent/internal"
 	"github.com/miekg/dns"
 	"github.com/pkg/errors"
 )
@@ -13,21 +14,13 @@ func constructHostport(
 	address net.IP,
 	port uint16,
 ) (hostport string, err error) {
-	if isIPv6(address) {
+	if internal.IsIPv6(address) {
 		return fmt.Sprintf("[%s]:%d", address.String(), port), nil
 	}
-	if isIPv4(address) {
+	if internal.IsIPv4(address) {
 		return fmt.Sprintf("%s:%d", address.String(), port), nil
 	}
 	return "", errors.New("invalid IP address")
-}
-
-func isIPv4(address net.IP) bool {
-	return address.To4() != nil
-}
-
-func isIPv6(address net.IP) bool {
-	return address.To16() != nil && address.To4() == nil
 }
 
 func constructClients() (
