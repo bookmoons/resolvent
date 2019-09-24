@@ -25,7 +25,7 @@ func TestQuery(t *testing.T) {
 		})
 		stub := double.NewStubQuerier(messages)
 		querier := construct(t, stub, 10)
-		result := helper.SimpleQuery(t, querier, "query, failed")
+		result := helper.SimpleQuery(t, querier, "query failed")
 		helper.DeepEqual(t, messages[0], result, "incorrect response")
 	})
 	t.Run("3 responses", func(t *testing.T) {
