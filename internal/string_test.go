@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestConstructAddress(t *testing.T) {
@@ -12,7 +12,7 @@ func TestConstructAddress(t *testing.T) {
 	t.Run("invalid", func(t *testing.T) {
 		var address net.IP = []byte{1, 2, 3, 4, 5}
 		_, err := ConstructAddress(address)
-		assert.EqualError(t, err, "invalid IP address")
+		require.EqualError(t, err, "invalid IP address")
 	})
 	pass := []struct {
 		address net.IP
@@ -24,8 +24,8 @@ func TestConstructAddress(t *testing.T) {
 	for _, item := range pass {
 		t.Run(item.address.String(), func(t *testing.T) {
 			result, err := ConstructAddress(item.address)
-			assert.NoError(t, err, "incorrect fail")
-			assert.Equal(t, result, item.result)
+			require.NoError(t, err, "incorrect fail")
+			require.Equal(t, result, item.result)
 		})
 	}
 }
@@ -35,7 +35,7 @@ func TestConstructHostport(t *testing.T) {
 	t.Run("invalid", func(t *testing.T) {
 		var address net.IP = []byte{1, 2, 3, 4, 5}
 		_, err := ConstructHostport(address, 50000)
-		assert.EqualError(t, err, "invalid IP address")
+		require.EqualError(t, err, "invalid IP address")
 	})
 	pass := []struct {
 		address net.IP
@@ -48,8 +48,8 @@ func TestConstructHostport(t *testing.T) {
 	for _, item := range pass {
 		t.Run(item.address.String(), func(t *testing.T) {
 			hostport, err := ConstructHostport(item.address, item.port)
-			assert.NoError(t, err, "incorrect fail")
-			assert.Equal(t, hostport, item.result)
+			require.NoError(t, err, "incorrect fail")
+			require.Equal(t, hostport, item.result)
 		})
 	}
 }

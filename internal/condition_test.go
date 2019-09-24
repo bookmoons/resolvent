@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestIsIPv4(t *testing.T) {
@@ -22,12 +22,12 @@ func TestIsIPv4(t *testing.T) {
 	}
 	for _, item := range pass {
 		t.Run(item.String(), func(t *testing.T) {
-			assert.True(t, IsIPv4(item), "incorrect fail")
+			require.True(t, IsIPv4(item), "incorrect fail")
 		})
 	}
 	for _, item := range fail {
 		t.Run(item.String(), func(t *testing.T) {
-			assert.False(t, IsIPv4(item), "incorrect pass")
+			require.False(t, IsIPv4(item), "incorrect pass")
 		})
 	}
 }
@@ -47,12 +47,12 @@ func TestIsIPv6(t *testing.T) {
 	}
 	for _, item := range pass {
 		t.Run(item.String(), func(t *testing.T) {
-			assert.True(t, IsIPv6(item), "incorrect fail")
+			require.True(t, IsIPv6(item), "incorrect fail")
 		})
 	}
 	for _, item := range fail {
 		t.Run(item.String(), func(t *testing.T) {
-			assert.False(t, IsIPv6(item), "incorrect pass")
+			require.False(t, IsIPv6(item), "incorrect pass")
 		})
 	}
 }
